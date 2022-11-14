@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>433MHz Remotes Controller</title>
+	</head>
+	<body>
+		<script>
+			function run() {
+			   var xhr = new XMLHttpRequest();
+			   var url = "http://"+document.getElementById("tip").value+"/send"+document.getElementById("sendcode").value+"pl"+document.getElementById("pl").value+"proto"+document.getElementById("proto").value;
+			   xhr.open("GET", url, true);
+			   xhr.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("httpres").style.background = "green";
+					document.getElementById("httpres").innerHTML = "SUCCESS SENDING CODE : "+this.responseText;
+					}else{
+					document.getElementById("httpres").style.background = "red";
+					document.getElementById("httpres").innerHTML = "ERROR SENDING CODE : "+this.status+" : "+this.responseText;
+					}
+				}
+				xhr.send();
+			}
+			function reloadPage() {
+				window.location.href = "/";
+			}
+			function erase() {
+			   var xhr = new XMLHttpRequest();
+			   var url = "/trunc";
+			   xhr.open("GET", url, true);
+			   xhr.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("httpres").style.background = "green";
+					document.getElementById("httpres").innerHTML = "SD ERASE SUCCESS : "+this.responseText;
+					window.location.href = "/?erased";	
+					}else{
+					document.getElementById("httpres").style.background = "red";
+					document.getElementById("httpres").innerHTML = "SD ERASE ERROR : "+" : "+this.responseText;
+					}
+				}
+				xhr.send();
+			}
+		</script>
+		<div style="width: 100%;position: fixed;top: 0;background: #555;color: #f1f1f1;padding: 10px;height: 120px;">
+			<h3>433MHz Remotes Controller</h3>
+			<hr>
+			Code : <input type="text" name="sendcode" id="sendcode" placeholder="binary code" size="25">
+			&nbsp;&nbsp;&nbsp;
+			Pulse Length : <input type="text" name="pl" id="pl" size="4">
+			&nbsp;&nbsp;&nbsp;
+			Protocol : <input type="text" name="proto" id="proto" size="1">
+			&nbsp;&nbsp;&nbsp;
+			Transmitter IP : <input type="text" name="tip" id="tip" placeholder="Transmitter IP Address">
+			&nbsp;&nbsp;&nbsp;
+			<button type="button" onclick="run()">Send Code</button>
+			&nbsp;&nbsp;&nbsp;
+			<span id="httpres" style="color: #f1f1f1;padding: 4px;"></span>
+			<br><br>
+			<button type="button" onclick="erase()" style="float: right;margin-right: 2rem;">Erase SD</button>
+			<button type="button" onclick="reloadPage()" style="float: right;margin-right: 3rem;">Reload Page</button>
+			
+		</div>
+		<div style="padding-top: 150px;">
+		
+		</div>
+	</body>
+</html>
